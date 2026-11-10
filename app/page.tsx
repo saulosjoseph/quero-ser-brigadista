@@ -355,7 +355,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* LADO ESQUERDO: TEXTOS E CHAMADAS */}
-            <div className="lg:col-span-7 flex flex-col gap-4 pt-8 sm:pt-2 lg:pt-0">
+            <div className="lg:col-span-6 flex flex-col gap-4 pt-8 sm:pt-2 lg:pt-0">
               <div className="inline-block self-start bg-[#166534] text-[#FEF08A] font-poster text-sm sm:text-base px-3 py-1 border-2 border-[#18181B] shadow-poster-sm uppercase">
                 Defesa Popular do Território
               </div>
@@ -378,7 +378,7 @@ export default function Home() {
             </div>
 
             {/* LADO DIREITO: ILUSTRAÇÃO TOPO */}
-            <div className="lg:col-span-5 flex flex-col items-center justify-center w-full lg:pt-6">
+            <div className="lg:col-span-6 flex flex-col items-center justify-center w-full">
               <div className="relative aspect-square w-full">
                 <Image
                   src="/images/topo.svg"
@@ -416,14 +416,16 @@ export default function Home() {
                 A Amazônia está queimando e o Estado brasileiro se mostra incapaz de resolver a situação — seja devido a uma política de ajuste fiscal que impede investimentos estruturais e de pessoal, seja por se alinhar aos interesses do agronegócio e de empreiteiras que veem no fogo uma oportunidade de expandir as fronteiras de seus negócios. Diante desse cenário, o povo está na linha de frente do combate: sem equipamentos, sem EPIs e sem treinamento.
               </p>
               <p>
-                Este cadastro serve para levantarmos o quantitativo de pessoas que querem se unir no combate às queimadas de forma organizada, equipada e treinada.
-              </p>
-              <p>
-                Exigimos que o Estado entregue equipamentos para as comunidades que estão na linha de frente e forneça treinamento básico de forma imediata.
+                Exigimos que o Estado entregue equipamentos para as comunidades que estão na linha de frente e forneça treinamento básico rápido de forma <strong>imediata</strong>.
               </p>
               <p>
                 Exigimos um programa permanente de formação de brigadistas comunitários e o fortalecimento da rede de brigadistas já existente, com financiamento pelo Estado brasileiro, de forma que nunca mais um brigadista — herói do povo contra o fogo — dependa de doação de pão e água para continuar na luta.
               </p>
+              <div className="bg-[#FEF08A] text-[#18181B] p-4 sm:p-5 border-2 border-[#18181B] border-l-8 border-l-[#B91C1C] shadow-poster my-2">
+                <p className="font-bold text-lg sm:text-xl leading-snug">
+                  Este cadastro serve para levantarmos o quantitativo de pessoas que querem se unir no combate às queimadas de forma organizada, equipada e treinada.
+                </p>
+              </div>
             </div>
           </div>
         </section>
