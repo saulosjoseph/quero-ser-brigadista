@@ -757,7 +757,7 @@ export default function AdminPage() {
       <footer className="w-full bg-[#18181B] text-[#FAF4E6] border-t-4 border-[#18181B] mt-12 py-6 px-4">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left text-xs text-zinc-400">
           <div>
-            Painel Administrativo Interno &bull; Acesso Restrito via URL Direta
+            Painel Administrativo Interno
           </div>
           <div className="font-poster text-sm uppercase text-[#FEF08A]">
             &ldquo;Servir ao povo de todo o coração&rdquo;

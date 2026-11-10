@@ -20,12 +20,13 @@ export const metadata: Metadata = {
     "Cadastro para Brigadas Comunitárias de combate e prevenção a incêndios florestais. Servir ao povo de todo o coração!",
   icons: {
     icon: [
+      { url: "/fav2.jpg", type: "image/jpeg" },
+      { url: "/images/fav2.jpg", type: "image/jpeg" },
       { url: "/fav.png", type: "image/png" },
-      { url: "/images/fav.png", type: "image/png" },
       { url: "/favicon.ico", sizes: "any" },
     ],
-    shortcut: "/fav.png",
-    apple: "/fav.png",
+    shortcut: "/fav2.jpg",
+    apple: "/fav2.jpg",
   },
 };
 
