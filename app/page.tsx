@@ -413,7 +413,7 @@ export default function Home() {
 
             <div className="space-y-4 text-base sm:text-lg text-[#27272A] leading-relaxed font-medium">
               <p>
-                A Amazônia está queimando e o Estado brasileiro se mostra incapaz de resolver a situação — seja devido a uma política de ajuste fiscal que impede investimentos estruturais e de pessoal, seja por se alinhar aos interesses do agronegócio e de empreiteiras que veem no fogo uma oportunidade de expandir as fronteiras de seus negócios. Diante desse cenário, o povo está na linha de frente do combate: sem equipamentos, sem EPIs e sem treinamento.
+                A Amazônia está queimando e o Estado brasileiro se mostra incapaz de resolver a situação — seja devido a uma política de ajuste fiscal que privilegia o mercado financeiro e impede investimentos estruturais e de pessoal, seja por se alinhar aos interesses do agronegócio e de empreiteiras que veem no fogo uma oportunidade de expandir as fronteiras de seus negócios. Diante desse cenário, o povo está na linha de frente do combate: sem equipamentos, sem EPIs e sem treinamento.
               </p>
               <p>
                 Exigimos que o Estado entregue equipamentos para as comunidades que estão na linha de frente e forneça treinamento básico rápido de forma <strong>imediata</strong>.
