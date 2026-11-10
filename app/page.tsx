@@ -476,7 +476,7 @@ export default function Home() {
                     </span>
                   </div>
                   <p className="text-sm text-[#1F2937] max-w-md">
-                    Obrigado por se somar à luta comunitária. Suas informações foram registradas e serão articuladas pelas lideranças da sua região.
+                    Obrigado por se somar à luta comunitária, logo entraremos em contato.
                   </p>
                   <button
                     onClick={resetForm}
