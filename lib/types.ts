@@ -9,10 +9,14 @@ export interface Brigadista {
   zonaRural: boolean;
   bairro?: string;
   comunidade?: string;
+  consentimentoLgpd?: boolean;
   criadoEm: string;
 }
 
-export type NovoCadastroInput = Omit<Brigadista, "id" | "criadoEm">;
+export type NovoCadastroInput = Omit<Brigadista, "id" | "criadoEm"> & {
+  consentimentoLgpd: boolean;
+  consentimentoResponsavel?: boolean;
+};
 
 export function calcularIdade(dataNascimento: string): number {
   if (!dataNascimento) return 0;

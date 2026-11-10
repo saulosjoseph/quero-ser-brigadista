@@ -204,6 +204,29 @@ export default function AdminPage() {
     });
   }, [brigadistasFiltrados, agrupamento]);
 
+  // Atendimento ao Art. 18 da LGPD: Exclusão de dados pessoais a pedido do titular
+  async function handleExcluirCadastro(id: string, nome: string) {
+    const confirmou = window.confirm(
+      `Confirma a exclusão definitiva dos dados de "${nome}"?\n\nEsta operação é permanente e atende à solicitação de eliminação de dados pessoais prevista no Art. 18 da LGPD.`
+    );
+    if (!confirmou) return;
+
+    try {
+      const res = await fetch(`/api/cadastros?id=${encodeURIComponent(id)}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        alert(data.error || "Não foi possível excluir o cadastro.");
+        return;
+      }
+      setCadastros((prev) => prev.filter((item) => item.id !== id));
+    } catch (err) {
+      console.error("Erro ao excluir cadastro:", err);
+      alert("Falha na conexão ao tentar excluir cadastro.");
+    }
+  }
+
   // Exportar dados filtrados para CSV
   function exportarCSV() {
     const cabecalho = [
@@ -299,6 +322,28 @@ export default function AdminPage() {
       </header>
 
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col gap-6">
+        {/* AVISO DE CONFORMIDADE LGPD */}
+        <section className="bg-[#FEF9C3] border-3 border-[#18181B] p-4 shadow-poster-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-[#713F12]">
+          <div className="flex items-start gap-2">
+            <span className="font-black text-base text-[#B91C1C]">🛡️</span>
+            <div>
+              <strong className="uppercase font-poster tracking-wide text-sm block text-[#18181B]">
+                Aviso de Proteção de Dados (LGPD - Lei nº 13.709/2018)
+              </strong>
+              <span>
+                O tratamento destas informações pessoais é restrito à finalidade legítima de articulação e capacitação comunitária de brigadistas. É dever dos administradores zelar pela confidencialidade e atender prontamente às solicitações de exclusão e retificação dos titulares.
+              </span>
+            </div>
+          </div>
+          <Link
+            href="/privacidade"
+            target="_blank"
+            className="underline font-bold text-[#B91C1C] hover:text-[#991B1B] shrink-0 uppercase"
+          >
+            Ver Política de Privacidade →
+          </Link>
+        </section>
+
         {/* CARDS DE MÉTRICAS */}
         <section className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
           <div className="bg-[#FFFDF8] border-3 border-[#18181B] p-4 shadow-poster-sm">
@@ -322,7 +367,7 @@ export default function AdminPage() {
             <span className="font-poster text-3xl sm:text-4xl text-[#854D0E] block font-bold">
               {metricas.menores}
             </span>
-            <span className="text-[11px] text-[#713F12]">apoio e prevenção</span>
+            <span className="text-[11px] text-[#713F12]">pressão popular e apoio</span>
           </div>
 
           <div className="bg-[#FFFDF8] border-3 border-[#18181B] p-4 shadow-poster-sm">
@@ -550,6 +595,7 @@ export default function AdminPage() {
                       <th className="p-3 border-b-2 border-[#18181B]">Cidade / UF</th>
                       <th className="p-3 border-b-2 border-[#18181B]">Zona</th>
                       <th className="p-3 border-b-2 border-[#18181B]">Bairro / Comunidade</th>
+                      <th className="p-3 border-b-2 border-[#18181B] text-center">Ação LGPD</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#E4E4E7] text-sm">
@@ -588,6 +634,16 @@ export default function AdminPage() {
                           </td>
                           <td className="p-3 font-bold">
                             {b.zonaRural ? b.comunidade : b.bairro}
+                          </td>
+                          <td className="p-3 text-center whitespace-nowrap">
+                            <button
+                              type="button"
+                              onClick={() => handleExcluirCadastro(b.id, b.nome)}
+                              title="Excluir cadastro a pedido do titular (LGPD Art. 18)"
+                              className="bg-[#FEE2E2] hover:bg-[#B91C1C] text-[#991B1B] hover:text-white border border-[#B91C1C] px-2 py-1 text-xs font-poster uppercase cursor-pointer transition-colors shadow-poster-sm"
+                            >
+                              Excluir
+                            </button>
                           </td>
                         </tr>
                       );
@@ -630,6 +686,7 @@ export default function AdminPage() {
                               <th className="p-2.5 sm:px-4">Telefone</th>
                               <th className="p-2.5 sm:px-4">E-mail</th>
                               <th className="p-2.5 sm:px-4">Localidade Específica</th>
+                              <th className="p-2.5 sm:px-4 text-center">Ação LGPD</th>
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-[#E4E4E7] text-sm">
@@ -670,6 +727,16 @@ export default function AdminPage() {
                                         Bairro: <strong>{m.bairro}</strong> ({m.cidade} - {m.estado})
                                       </span>
                                     )}
+                                  </td>
+                                  <td className="p-2.5 sm:px-4 text-center whitespace-nowrap">
+                                    <button
+                                      type="button"
+                                      onClick={() => handleExcluirCadastro(m.id, m.nome)}
+                                      title="Excluir cadastro a pedido do titular (LGPD Art. 18)"
+                                      className="bg-[#FEE2E2] hover:bg-[#B91C1C] text-[#991B1B] hover:text-white border border-[#B91C1C] px-2 py-1 text-xs font-poster uppercase cursor-pointer transition-colors shadow-poster-sm"
+                                    >
+                                      Excluir
+                                    </button>
                                   </td>
                                 </tr>
                               );

@@ -2,6 +2,8 @@
 
 import { useState, useTransition, useEffect, useMemo } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { isMaiorDeIdade } from "@/lib/types";
 
 interface EstadoIBGE {
   id: number;
@@ -85,17 +87,25 @@ export default function Home() {
   const [cidade, setCidade] = useState("Santarém");
   const [zonaRural, setZonaRural] = useState(false);
   const [localidade, setLocalidade] = useState("");
+  const [consentimentoLgpd, setConsentimentoLgpd] = useState(false);
+  const [consentimentoResponsavel, setConsentimentoResponsavel] = useState(false);
   const [dataMaxima, setDataMaxima] = useState("");
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setDataMaxima(new Date().toISOString().split("T")[0]);
+  }, []);
+
+  const menorDeIdade = useMemo(() => {
+    if (!dataNascimento) return false;
+    return !isMaiorDeIdade(dataNascimento);
+  }, [dataNascimento]);
 
   const [estados, setEstados] = useState<EstadoIBGE[]>([]);
   const [carregandoEstados, setCarregandoEstados] = useState(true);
 
   const [municipios, setMunicipios] = useState<MunicipioIBGE[]>([]);
   const [carregandoCidades, setCarregandoCidades] = useState(true);
-
-  useEffect(() => {
-    setDataMaxima(new Date().toISOString().split("T")[0]);
-  }, []);
 
   // Carrega a lista de estados utilizando a API oficial do IBGE:
   // GET https://servicodados.ibge.gov.br/api/v1/localidades/estados
@@ -174,9 +184,8 @@ export default function Home() {
 
   // Recarrega por estado se a lista geral estiver vazia e houver estado selecionado
   useEffect(() => {
-    if (municipios.length === 0 && estado && !carregandoCidades) {
+    if (municipios.length === 0 && estado) {
       let ativo = true;
-      setCarregandoCidades(true);
       fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`)
         .then((r) => (r.ok ? r.json() : []))
         .then((data: MunicipioIBGE[]) => {
@@ -192,7 +201,7 @@ export default function Home() {
         ativo = false;
       };
     }
-  }, [estado, municipios.length, carregandoCidades]);
+  }, [estado, municipios.length]);
 
   // Filtra as cidades do estado selecionado
   const cidadesDoEstado = useMemo(() => {
@@ -226,6 +235,8 @@ export default function Home() {
     setCidade("Santarém");
     setZonaRural(false);
     setLocalidade("");
+    setConsentimentoLgpd(false);
+    setConsentimentoResponsavel(false);
     setErrorMessage(null);
     setSucesso(false);
   }
@@ -262,6 +273,18 @@ export default function Home() {
       );
       return;
     }
+    if (menorDeIdade && !consentimentoResponsavel) {
+      setErrorMessage(
+        "Para voluntários menores de 18 anos, é obrigatório confirmar a autorização de pelo menos um dos pais ou responsável legal (Art. 14 da LGPD)."
+      );
+      return;
+    }
+    if (!consentimentoLgpd) {
+      setErrorMessage(
+        "É necessário ler e aceitar a Política de Privacidade e o Termo de Consentimento para continuar."
+      );
+      return;
+    }
 
     startTransition(async () => {
       try {
@@ -275,6 +298,8 @@ export default function Home() {
           zonaRural,
           bairro: !zonaRural ? localidade : undefined,
           comunidade: zonaRural ? localidade : undefined,
+          consentimentoLgpd: true,
+          consentimentoResponsavel: menorDeIdade ? consentimentoResponsavel : true,
         };
 
         const res = await fetch("/api/cadastros", {
@@ -497,7 +522,12 @@ export default function Home() {
                         required
                         max={dataMaxima || undefined}
                         value={dataNascimento}
-                        onChange={(e) => setDataNascimento(e.target.value)}
+                        onChange={(e) => {
+                          setDataNascimento(e.target.value);
+                          if (isMaiorDeIdade(e.target.value)) {
+                            setConsentimentoResponsavel(false);
+                          }
+                        }}
                         className="bg-white border-2 border-[#18181B] px-3.5 py-2 text-base font-medium shadow-poster-sm focus:outline-none focus:ring-2 focus:ring-[#B91C1C]"
                       />
                     </div>
@@ -633,11 +663,63 @@ export default function Home() {
                     />
                   </div>
 
+                  {/* AVISO E AUTORIZAÇÃO PARA MENORES DE 18 ANOS (ART. 14 LGPD) */}
+                  {menorDeIdade && (
+                    <div className="bg-[#FEF08A] p-4 border-2 border-[#18181B] shadow-poster-sm flex flex-col gap-3">
+                      <div className="flex items-start gap-2">
+                        <span className="font-black text-base text-[#B91C1C]">📢</span>
+                        <div className="text-xs sm:text-sm text-[#18181B] leading-snug">
+                          <strong className="font-poster uppercase text-sm block text-[#B91C1C] mb-0.5">
+                            Participação de Menores de 18 Anos: Mobilização e Pressão Popular
+                          </strong>
+                          Menores de 18 anos não atuam no combate direto ao fogo, mas são fundamentais na{" "}
+                          <strong>pressão popular organizada sobre o Estado</strong> para exigir a entrega de equipamentos e a realização de treinamentos para as brigadas comunitárias.
+                        </div>
+                      </div>
+                      <label className="flex items-start gap-3 cursor-pointer select-none bg-[#FFFDF8] p-3 border border-[#18181B]">
+                        <input
+                          type="checkbox"
+                          required
+                          checked={consentimentoResponsavel}
+                          onChange={(e) => setConsentimentoResponsavel(e.target.checked)}
+                          className="w-5 h-5 mt-0.5 accent-[#B91C1C] border-2 border-[#18181B] rounded cursor-pointer shrink-0"
+                        />
+                        <span className="text-xs sm:text-sm text-[#18181B] font-semibold leading-snug">
+                          Em conformidade com o <strong>Art. 14 da LGPD</strong>, declaro que possuo o consentimento específico de pelo menos um dos meus pais ou responsável legal para o cadastro e participação nas ações de mobilização popular.
+                        </span>
+                      </label>
+                    </div>
+                  )}
+
+                  {/* TERMO DE CONSENTIMENTO LGPD */}
+                  <div className="bg-[#FEF9C3] p-4 border-2 border-[#18181B] shadow-poster-sm flex flex-col gap-2">
+                    <label className="flex items-start gap-3 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        required
+                        checked={consentimentoLgpd}
+                        onChange={(e) => setConsentimentoLgpd(e.target.checked)}
+                        className="w-5 h-5 mt-0.5 accent-[#B91C1C] border-2 border-[#18181B] rounded cursor-pointer shrink-0"
+                      />
+                      <span className="text-xs sm:text-sm text-[#18181B] font-medium leading-snug">
+                        Li e concordo com a{" "}
+                        <Link
+                          href="/privacidade"
+                          target="_blank"
+                          className="font-bold underline text-[#B91C1C] hover:text-[#991B1B]"
+                        >
+                          Política de Privacidade e Termo de Consentimento (LGPD)
+                        </Link>
+                        , autorizando o tratamento e compartilhamento das minhas informações exclusivamente com lideranças e coordenadores locais das brigadas comunitárias.
+                      </span>
+                    </label>
+                  </div>
+
                   {/* BOTÃO DE SUBMIT */}
                   <button
                     type="submit"
                     disabled={isPending}
-                    className="mt-3 bg-[#B91C1C] hover:bg-[#991B1B] active:translate-x-0.5 active:translate-y-0.5 text-white font-poster text-2xl uppercase tracking-wider py-4 px-6 border-3 border-[#18181B] shadow-poster cursor-pointer transition-all disabled:opacity-50"
+                    className="mt-1 bg-[#B91C1C] hover:bg-[#991B1B] active:translate-x-0.5 active:translate-y-0.5 text-white font-poster text-2xl uppercase tracking-wider py-4 px-6 border-3 border-[#18181B] shadow-poster cursor-pointer transition-all disabled:opacity-50"
                   >
                     {isPending ? "Registrando Voluntário..." : "Enviar Meu Cadastro!"}
                   </button>
@@ -663,7 +745,7 @@ export default function Home() {
               Articulação Comunitária Autônoma e Popular &bull; Santarém e Região Amazônica
             </span>
           </div>
-          <div className="flex items-center gap-4 font-poster text-xs sm:text-sm uppercase tracking-wider">
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-3 font-poster text-xs sm:text-sm uppercase tracking-wider">
             <a href="#sobre" className="text-[#FEF08A] hover:underline">
               Sobre a Luta
             </a>
@@ -671,6 +753,10 @@ export default function Home() {
             <a href="#cadastro" className="text-[#FEF08A] hover:underline">
               Ficha de Inscrição
             </a>
+            <span className="text-zinc-600">&bull;</span>
+            <Link href="/privacidade" className="text-[#FEF08A] hover:underline">
+              Privacidade (LGPD)
+            </Link>
           </div>
         </div>
       </footer>

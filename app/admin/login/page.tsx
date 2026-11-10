@@ -98,9 +98,6 @@ export default function AdminLoginPage() {
             <h2 className="font-poster text-2xl sm:text-3xl uppercase tracking-wide text-[#18181B]">
               LOGIN DE ADMINISTRADOR
             </h2>
-            <p className="text-xs text-zinc-600 mt-1">
-              Informe as credenciais de um administrador cadastrado no banco de dados.
-            </p>
           </div>
 
           {/* MENSAGEM DE ERRO */}
@@ -164,20 +161,11 @@ export default function AdminLoginPage() {
             >
               {loading ? "Autenticando..." : "Entrar no Painel"}
             </button>
-          </form>
 
-          {/* AVISO IMPORTANTE SOBRE AUSÊNCIA DE CADASTRO NO SITE */}
-          <div className="bg-[#FEF08A] border-2 border-[#854D0E] p-3 text-[11px] text-[#713F12] leading-relaxed">
-            <p className="font-bold uppercase mb-1">Aviso do Sistema:</p>
-            <p>
-              Não é permitido criar contas ou cadastrar novos administradores pelo site.
-              O acesso é concedido apenas a usuários cadastrados diretamente na tabela{" "}
-              <code className="bg-white/80 px-1 py-0.5 border border-[#854D0E]/30 font-mono">
-                admins
-              </code>{" "}
-              do banco de dados.
+            <p className="text-[11px] text-center text-[#71717A] mt-2 leading-relaxed">
+              🔒 Acesso restrito a administradores credenciados. As informações pessoais tratadas neste sistema são protegidas pela LGPD (Lei nº 13.709/2018).
             </p>
-          </div>
+          </form>
         </div>
       </main>
 

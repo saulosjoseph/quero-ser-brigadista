@@ -10,17 +10,22 @@ CREATE TABLE IF NOT EXISTS public.cadastros (
   zona_rural BOOLEAN NOT NULL DEFAULT false,
   bairro TEXT,
   comunidade TEXT,
+  consentimento_lgpd BOOLEAN NOT NULL DEFAULT true,
   criado_em TIMESTAMPTZ NOT NULL DEFAULT timezone('utc', now())
 );
+
+-- Migração caso a tabela já exista: adiciona coluna de consentimento
+ALTER TABLE public.cadastros ADD COLUMN IF NOT EXISTS consentimento_lgpd BOOLEAN NOT NULL DEFAULT true;
 
 -- Ativação de Row Level Security (RLS)
 ALTER TABLE public.cadastros ENABLE ROW LEVEL SECURITY;
 
--- Políticas de acesso
-CREATE POLICY "Permitir leitura pública de cadastros"
-ON public.cadastros FOR SELECT
-USING (true);
+-- CONFORMIDADE LGPD (Art. 46): Os dados pessoais dos voluntários NUNCA devem ser públicos!
+-- Revoga leitura pública pré-existente
+DROP POLICY IF EXISTS "Permitir leitura pública de cadastros" ON public.cadastros;
 
+-- Apenas o backend autenticado com chave service_role pode consultar e gerenciar cadastros.
+-- Para inserções de novos voluntários via frontend/backend:
 CREATE POLICY "Permitir inserção de cadastros"
 ON public.cadastros FOR INSERT
 WITH CHECK (true);

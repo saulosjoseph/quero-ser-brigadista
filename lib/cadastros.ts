@@ -14,6 +14,7 @@ interface CadastroRow {
   zona_rural: boolean;
   bairro: string | null;
   comunidade: string | null;
+  consentimento_lgpd?: boolean;
   criado_em: string;
 }
 
@@ -29,6 +30,7 @@ function rowParaBrigadista(row: CadastroRow): Brigadista {
     zonaRural: Boolean(row.zona_rural),
     bairro: row.bairro || undefined,
     comunidade: row.comunidade || undefined,
+    consentimentoLgpd: row.consentimento_lgpd ?? true,
     criadoEm: row.criado_em,
   };
 }
@@ -51,7 +53,7 @@ export async function salvarCadastro(input: NovoCadastroInput): Promise<Brigadis
   const novoId = `brg-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
   const criadoEm = new Date().toISOString();
 
-  const novoRegistro = {
+  const baseRegistro = {
     id: novoId,
     nome: input.nome.trim(),
     data_nascimento: input.dataNascimento.trim(),
@@ -65,11 +67,27 @@ export async function salvarCadastro(input: NovoCadastroInput): Promise<Brigadis
     criado_em: criadoEm,
   };
 
-  const { data, error } = await supabase
+  const novoRegistro = {
+    ...baseRegistro,
+    consentimento_lgpd: Boolean(input.consentimentoLgpd),
+  };
+
+  let { data, error } = await supabase
     .from("cadastros")
     .insert([novoRegistro])
     .select()
     .single();
+
+  // Fallback seguro caso a migração da coluna consentimento_lgpd ainda não tenha sido aplicada no banco
+  if (error && error.message?.includes("consentimento_lgpd")) {
+    const retry = await supabase
+      .from("cadastros")
+      .insert([baseRegistro])
+      .select()
+      .single();
+    data = retry.data;
+    error = retry.error;
+  }
 
   if (error) {
     console.error("Erro ao salvar cadastro no Supabase:", error);
@@ -77,5 +95,16 @@ export async function salvarCadastro(input: NovoCadastroInput): Promise<Brigadis
   }
 
   return rowParaBrigadista(data as CadastroRow);
+}
+
+export async function excluirCadastro(id: string): Promise<boolean> {
+  const { error } = await supabase.from("cadastros").delete().eq("id", id);
+
+  if (error) {
+    console.error(`Erro ao excluir cadastro ${id} no Supabase:`, error);
+    throw new Error(`Falha ao excluir cadastro no Supabase: ${error.message}`);
+  }
+
+  return true;
 }
 
