@@ -287,7 +287,7 @@ export default function AdminPage() {
             </span>
             <div>
               <h1 className="font-poster text-xl sm:text-2xl tracking-wide uppercase text-[#FEF08A]">
-                PAINEL ADMIN &bull; BRIGADAS POPULARES
+                PAINEL ADMIN &bull; BRIGADAS COMUNITÁRIAS
               </h1>
               <p className="text-xs text-zinc-300">
                 Mapeamento, Agrupamento e Articulação dos Voluntários Cadastrados

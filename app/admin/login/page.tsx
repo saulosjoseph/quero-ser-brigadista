@@ -65,7 +65,7 @@ export default function AdminLoginPage() {
             </span>
             <div>
               <h1 className="font-poster text-xl sm:text-2xl tracking-wide uppercase text-[#FEF08A]">
-                BRIGADAS POPULARES &bull; CONTROLE INTERNO
+                BRIGADAS COMUNITÁRIAS &bull; CONTROLE INTERNO
               </h1>
               <p className="text-xs text-zinc-300">
                 Acesso Exclusivo à Coordenação e Administração
@@ -171,7 +171,7 @@ export default function AdminLoginPage() {
 
       {/* RODAPÉ */}
       <footer className="w-full bg-[#18181B] text-[#FAF4E6] border-t-4 border-[#18181B] py-4 px-4 text-center text-xs text-zinc-400">
-        Painel de Gestão e Articulação Territorial &bull; Brigadas Populares
+        Painel de Gestão e Articulação Territorial &bull; Brigadas Comunitárias
       </footer>
     </div>
   );
