@@ -14,6 +14,37 @@ interface AdminInfo {
   email: string;
 }
 
+function WhatsAppIcon({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.26-1.5-1.41-1.75-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.71 4.3 3.79.6.26 1.07.41 1.44.53.61.19 1.16.17 1.6.1.49-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.17-.48-.29" />
+    </svg>
+  );
+}
+
+function gerarLinkWhatsApp(telefone: string, nome?: string): string | null {
+  const digitos = (telefone || "").replace(/\D/g, "");
+  if (digitos.length < 10) return null;
+
+  const numero =
+    (digitos.length === 12 || digitos.length === 13) && digitos.startsWith("55")
+      ? digitos
+      : digitos.length === 10 || digitos.length === 11
+      ? `55${digitos}`
+      : digitos;
+
+  const mensagem = nome?.trim()
+    ? `Olá, ${nome.trim()}! Entramos em contato a respeito do seu cadastro no Quero Ser Brigadista.`
+    : "Olá! Entramos em contato a respeito do seu cadastro no Quero Ser Brigadista.";
+
+  return `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+}
+
 export default function AdminPage() {
   const router = useRouter();
 
@@ -590,7 +621,7 @@ export default function AdminPage() {
                     <tr className="bg-[#18181B] text-[#FEF08A] font-poster text-sm uppercase">
                       <th className="p-3 border-b-2 border-[#18181B]">Nome</th>
                       <th className="p-3 border-b-2 border-[#18181B]">Idade</th>
-                      <th className="p-3 border-b-2 border-[#18181B]">Telefone</th>
+                      <th className="p-3 border-b-2 border-[#18181B]">Telefone / WhatsApp</th>
                       <th className="p-3 border-b-2 border-[#18181B]">E-mail</th>
                       <th className="p-3 border-b-2 border-[#18181B]">Cidade / UF</th>
                       <th className="p-3 border-b-2 border-[#18181B]">Zona</th>
@@ -616,7 +647,23 @@ export default function AdminPage() {
                               {idade} anos ({maior ? "18+" : "&lt;18"})
                             </span>
                           </td>
-                          <td className="p-3 font-mono">{b.telefone}</td>
+                          <td className="p-3 font-mono">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span>{b.telefone}</span>
+                              {gerarLinkWhatsApp(b.telefone, b.nome) && (
+                                <a
+                                  href={gerarLinkWhatsApp(b.telefone, b.nome)!}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  title={`Falar com ${b.nome} no WhatsApp`}
+                                  className="inline-flex items-center gap-1 bg-[#166534] hover:bg-[#14532D] text-[#FEF08A] hover:text-white px-2 py-0.5 text-xs font-poster uppercase border border-[#18181B] shadow-poster-sm transition-colors whitespace-nowrap"
+                                >
+                                  <WhatsAppIcon className="w-3.5 h-3.5 shrink-0" />
+                                  <span>WhatsApp</span>
+                                </a>
+                              )}
+                            </div>
+                          </td>
                           <td className="p-3 text-zinc-600">{b.email || "—"}</td>
                           <td className="p-3 font-semibold">
                             {b.cidade} - {b.estado}
@@ -683,7 +730,7 @@ export default function AdminPage() {
                             <tr className="bg-[#F4EBD8] text-[#18181B] font-poster text-xs uppercase border-b border-[#18181B]">
                               <th className="p-2.5 sm:px-4">Nome</th>
                               <th className="p-2.5 sm:px-4">Idade</th>
-                              <th className="p-2.5 sm:px-4">Telefone</th>
+                              <th className="p-2.5 sm:px-4">Telefone / WhatsApp</th>
                               <th className="p-2.5 sm:px-4">E-mail</th>
                               <th className="p-2.5 sm:px-4">Localidade Específica</th>
                               <th className="p-2.5 sm:px-4 text-center">Ação LGPD</th>
@@ -710,7 +757,21 @@ export default function AdminPage() {
                                     </span>
                                   </td>
                                   <td className="p-2.5 sm:px-4 font-mono font-medium">
-                                    {m.telefone}
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                      <span>{m.telefone}</span>
+                                      {gerarLinkWhatsApp(m.telefone, m.nome) && (
+                                        <a
+                                          href={gerarLinkWhatsApp(m.telefone, m.nome)!}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          title={`Falar com ${m.nome} no WhatsApp`}
+                                          className="inline-flex items-center gap-1 bg-[#166534] hover:bg-[#14532D] text-[#FEF08A] hover:text-white px-2 py-0.5 text-xs font-poster uppercase border border-[#18181B] shadow-poster-sm transition-colors whitespace-nowrap"
+                                        >
+                                          <WhatsAppIcon className="w-3.5 h-3.5 shrink-0" />
+                                          <span>WhatsApp</span>
+                                        </a>
+                                      )}
+                                    </div>
                                   </td>
                                   <td className="p-2.5 sm:px-4 text-zinc-600">
                                     {m.email || "—"}
