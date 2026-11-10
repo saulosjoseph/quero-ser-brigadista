@@ -1,26 +1,40 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Brigadista, calcularIdade, isMaiorDeIdade } from "@/lib/types";
 
 type ModoAgrupamento = "estado" | "cidade" | "bairro" | "comunidade" | "todos";
 type FiltroIdade = "todos" | "maiores" | "menores";
 
+interface AdminInfo {
+  id: string;
+  nome: string;
+  email: string;
+}
+
 export default function AdminPage() {
+  const router = useRouter();
+
   const [cadastros, setCadastros] = useState<Brigadista[]>([]);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState<string | null>(null);
+  const [adminInfo, setAdminInfo] = useState<AdminInfo | null>(null);
 
   const [busca, setBusca] = useState("");
   const [agrupamento, setAgrupamento] = useState<ModoAgrupamento>("estado");
   const [filtroIdade, setFiltroIdade] = useState<FiltroIdade>("todos");
 
-  async function carregarCadastros() {
+  const carregarCadastros = useCallback(async () => {
     setLoading(true);
     setErro(null);
     try {
       const res = await fetch("/api/cadastros", { cache: "no-store" });
+      if (res.status === 401) {
+        router.push("/admin/login");
+        return;
+      }
       const data = await res.json();
       if (data.success && Array.isArray(data.cadastros)) {
         setCadastros(data.cadastros);
@@ -33,11 +47,71 @@ export default function AdminPage() {
     } finally {
       setLoading(false);
     }
+  }, [router]);
+
+  async function handleLogout() {
+    try {
+      await fetch("/api/admin/logout", { method: "POST" });
+    } catch (e) {
+      console.error("Erro no logout:", e);
+    } finally {
+      router.push("/admin/login");
+      router.refresh();
+    }
   }
 
   useEffect(() => {
-    carregarCadastros();
-  }, []);
+    let ativo = true;
+
+    async function carregarDadosIniciais() {
+      try {
+        const resMe = await fetch("/api/admin/me");
+        if (resMe.status === 401) {
+          router.push("/admin/login");
+          return;
+        }
+
+        const dataMe = await resMe.json();
+        if (!ativo) return;
+
+        if (dataMe.success && dataMe.admin) {
+          setAdminInfo(dataMe.admin);
+
+          const resCad = await fetch("/api/cadastros", { cache: "no-store" });
+          if (resCad.status === 401) {
+            router.push("/admin/login");
+            return;
+          }
+
+          const dataCad = await resCad.json();
+          if (!ativo) return;
+
+          if (dataCad.success && Array.isArray(dataCad.cadastros)) {
+            setCadastros(dataCad.cadastros);
+          } else {
+            setErro("Não foi possível carregar a lista de brigadistas.");
+          }
+        } else {
+          router.push("/admin/login");
+        }
+      } catch (err) {
+        if (ativo) {
+          console.error("Erro ao carregar dados do admin:", err);
+          setErro("Falha na conexão com o servidor.");
+        }
+      } finally {
+        if (ativo) {
+          setLoading(false);
+        }
+      }
+    }
+
+    carregarDadosIniciais();
+
+    return () => {
+      ativo = false;
+    };
+  }, [router]);
 
   // Filtro geral: busca textual + filtro de maioridade (maiores de 18 anos)
   const brigadistasFiltrados = useMemo(() => {
@@ -198,8 +272,13 @@ export default function AdminPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="bg-[#B91C1C] px-3 py-1 text-xs font-poster uppercase text-[#FEF08A] border border-[#FEF08A]">
+          <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2.5">
+            {adminInfo && (
+              <span className="text-xs text-[#FEF08A] bg-zinc-800/80 border border-zinc-700 px-2.5 py-1 font-mono">
+                👤 {adminInfo.nome || adminInfo.email}
+              </span>
+            )}
+            <div className="hidden md:block bg-[#B91C1C] px-3 py-1 text-xs font-poster uppercase text-[#FEF08A] border border-[#FEF08A]">
               &ldquo;Servir ao povo de todo o coração&rdquo;
             </div>
             <Link
@@ -208,6 +287,13 @@ export default function AdminPage() {
             >
               Voltar ao Site
             </Link>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="bg-[#B91C1C] text-white hover:bg-[#991B1B] text-xs font-poster uppercase px-2.5 py-1 border border-white cursor-pointer transition-colors"
+            >
+              Sair
+            </button>
           </div>
         </div>
       </header>

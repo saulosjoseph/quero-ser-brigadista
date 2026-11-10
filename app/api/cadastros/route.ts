@@ -1,11 +1,29 @@
 import { NextResponse } from "next/server";
 import { listarCadastros, salvarCadastro, NovoCadastroInput } from "@/lib/cadastros";
+import { obterSessaoAdmin } from "@/lib/auth";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const sessao = await obterSessaoAdmin(request);
+    if (!sessao) {
+      return NextResponse.json(
+        { success: false, error: "Acesso restrito a administradores autenticados." },
+        { status: 401 }
+      );
+    }
+
     const cadastros = await listarCadastros();
     return NextResponse.json({ success: true, total: cadastros.length, cadastros });
   } catch (error) {
+    if (
+      error &&
+      typeof error === "object" &&
+      "digest" in error &&
+      typeof (error as { digest: unknown }).digest === "string" &&
+      (error as { digest: string }).digest.startsWith("NEXT_")
+    ) {
+      throw error;
+    }
     console.error("Erro na API GET /api/cadastros:", error);
     return NextResponse.json(
       { success: false, error: "Não foi possível carregar os cadastros." },
