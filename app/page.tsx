@@ -78,6 +78,21 @@ function formatarTelefone(valor: string): string {
   return `(${apenasDigitos.slice(0, 2)}) ${apenasDigitos.slice(2, 7)}-${apenasDigitos.slice(7)}`;
 }
 
+const WHATSAPP_CHANNEL_URL = "https://whatsapp.com/channel/0029Vb9erkC1SWt4expwaY37";
+
+function WhatsAppIcon({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.26-1.5-1.41-1.75-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.71 4.3 3.79.6.26 1.07.41 1.44.53.61.19 1.16.17 1.6.1.49-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.17-.48-.29" />
+    </svg>
+  );
+}
+
 export default function Home() {
   const [nome, setNome] = useState("");
   const [dataNascimento, setDataNascimento] = useState("");
@@ -328,6 +343,9 @@ export default function Home() {
       {/* TARJA SUPERIOR COM LEMA DE HONRA */}
       <header className="w-full bg-[#B91C1C] text-white border-b-4 border-[#18181B] py-2.5 px-4 shadow-md sticky top-0 z-30">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
+          <span className="font-poster text-xs sm:text-sm uppercase tracking-wider text-[#FEF08A] hidden sm:inline-block">
+            Brigadas Comunitárias Já!
+          </span>
           <nav className="flex items-center gap-2 font-poster text-xs sm:text-sm uppercase tracking-wide">
             <a
               href="#sobre"
@@ -340,6 +358,15 @@ export default function Home() {
               className="bg-[#FEF08A] text-[#18181B] hover:bg-[#FACC15] px-3 py-1 border-2 border-[#18181B] shadow-poster-sm transition-all font-bold"
             >
               Quero Ser Voluntário
+            </a>
+            <a
+              href={WHATSAPP_CHANNEL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#166534] hover:bg-[#14532D] text-[#FEF08A] px-3 py-1 border-2 border-[#18181B] shadow-poster-sm transition-all font-bold flex items-center gap-1.5"
+            >
+              <WhatsAppIcon className="w-3.5 h-3.5" />
+              <span>Canal WhatsApp</span>
             </a>
           </nav>
         </div>
@@ -375,6 +402,24 @@ export default function Home() {
                 </strong>
                 , fornecimento de EPIs e equipamentos adequados para prevenção, combate a incêndios florestais e resposta imediata em defesa da vida.
               </p>
+
+              <div className="flex flex-wrap items-center gap-3 pt-2">
+                <a
+                  href="#cadastro"
+                  className="bg-[#B91C1C] hover:bg-[#991B1B] text-white font-poster text-sm sm:text-base px-5 py-2.5 uppercase border-2 border-[#18181B] shadow-poster transition-all"
+                >
+                  Quero Ser Voluntário &darr;
+                </a>
+                <a
+                  href={WHATSAPP_CHANNEL_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-[#166534] hover:bg-[#14532D] text-[#FEF08A] font-poster text-sm sm:text-base px-5 py-2.5 uppercase border-2 border-[#18181B] shadow-poster transition-all flex items-center gap-2"
+                >
+                  <WhatsAppIcon className="w-4 h-4" />
+                  <span>Canal no WhatsApp &rarr;</span>
+                </a>
+              </div>
             </div>
 
             {/* LADO DIREITO: ILUSTRAÇÃO TOPO */}
@@ -453,6 +498,28 @@ export default function Home() {
                 </li>
               </ul>
             </div>
+
+            {/* CARD CANAL DO WHATSAPP */}
+            <div className="bg-[#DCFCE7] text-[#14532D] p-6 border-4 border-[#18181B] shadow-poster flex flex-col gap-3">
+              <span className="bg-[#166534] text-[#FEF08A] font-poster text-xs px-2.5 py-1 uppercase tracking-wider inline-block border-2 border-[#18181B] self-start">
+                Comunicação Direta
+              </span>
+              <h2 className="font-poster text-2xl sm:text-3xl uppercase tracking-wide text-[#166534] leading-tight">
+                Canal Oficial no WhatsApp
+              </h2>
+              <p className="text-xs sm:text-sm text-[#1F2937] leading-relaxed">
+                Acompanhe em tempo real as novidades, informes sobre reuniões e ações de mobilização popular.
+              </p>
+              <a
+                href={WHATSAPP_CHANNEL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-1 bg-[#166534] hover:bg-[#14532D] text-[#FEF08A] font-poster text-sm sm:text-base px-4 py-2.5 uppercase border-2 border-[#18181B] shadow-poster-sm transition-all text-center flex items-center justify-center gap-2"
+              >
+                <WhatsAppIcon className="w-5 h-5" />
+                <span>Entrar no Canal do WhatsApp</span>
+              </a>
+            </div>
           </div>
 
           {/* COLUNA DO FORMULÁRIO */}
@@ -480,9 +547,18 @@ export default function Home() {
                   <p className="text-sm text-[#1F2937] max-w-md">
                     Obrigado por se somar à luta comunitária, logo entraremos em contato.
                   </p>
+                  <a
+                    href={WHATSAPP_CHANNEL_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-[#166534] hover:bg-[#14532D] text-[#FEF08A] font-poster text-base sm:text-lg px-6 py-3 uppercase border-2 border-[#18181B] shadow-poster transition-all inline-flex items-center gap-2"
+                  >
+                    <WhatsAppIcon className="w-5 h-5" />
+                    <span>Acompanhe pelo Canal do WhatsApp &rarr;</span>
+                  </a>
                   <button
                     onClick={resetForm}
-                    className="mt-2 bg-[#18181B] text-[#FEF08A] font-poster text-lg px-6 py-2.5 uppercase border-2 border-[#18181B] shadow-poster hover:bg-[#27272A] cursor-pointer"
+                    className="mt-2 bg-[#18181B] text-[#FEF08A] font-poster text-base px-6 py-2 uppercase border-2 border-[#18181B] shadow-poster hover:bg-[#27272A] cursor-pointer"
                   >
                     Realizar Novo Cadastro
                   </button>
@@ -754,6 +830,16 @@ export default function Home() {
             <span className="text-zinc-600">&bull;</span>
             <a href="#cadastro" className="text-[#FEF08A] hover:underline">
               Ficha de Inscrição
+            </a>
+            <span className="text-zinc-600">&bull;</span>
+            <a
+              href={WHATSAPP_CHANNEL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#FEF08A] hover:underline inline-flex items-center gap-1.5"
+            >
+              <WhatsAppIcon className="w-3.5 h-3.5" />
+              <span>Canal no WhatsApp</span>
             </a>
             <span className="text-zinc-600">&bull;</span>
             <Link href="/privacidade" className="text-[#FEF08A] hover:underline">
