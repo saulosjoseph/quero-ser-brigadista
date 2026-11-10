@@ -330,7 +330,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* LADO ESQUERDO: TEXTOS E CHAMADAS */}
-            <div className="lg:col-span-7 flex flex-col gap-4">
+            <div className="lg:col-span-7 flex flex-col gap-4 pt-8 sm:pt-2 lg:pt-0">
               <div className="inline-block self-start bg-[#166534] text-[#FEF08A] font-poster text-sm sm:text-base px-3 py-1 border-2 border-[#18181B] shadow-poster-sm uppercase">
                 Defesa Popular do Território
               </div>
