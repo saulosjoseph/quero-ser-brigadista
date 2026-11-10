@@ -17,7 +17,7 @@ const merriweatherSans = Merriweather_Sans({
 export const metadata: Metadata = {
   title: "Quero Ser Brigadista Comunitário | Só o Povo Salva o Povo!",
   description:
-    "Cadastro para Brigadas Populares Comunitárias de combate e prevenção a incêndios florestais. Servir ao povo de todo o coração!",
+    "Cadastro para Brigadas Comunitárias de combate e prevenção a incêndios florestais. Servir ao povo de todo o coração!",
   icons: {
     icon: "/favicon.ico",
   },

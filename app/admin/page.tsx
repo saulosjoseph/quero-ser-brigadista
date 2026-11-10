@@ -54,7 +54,7 @@ export default function AdminPage() {
 
       return (
         b.nome.toLowerCase().includes(termo) ||
-        b.email.toLowerCase().includes(termo) ||
+        (b.email || "").toLowerCase().includes(termo) ||
         b.telefone.includes(termo) ||
         b.cidade.toLowerCase().includes(termo) ||
         b.estado.toLowerCase().includes(termo) ||
@@ -159,7 +159,7 @@ export default function AdminPage() {
         idade,
         maior,
         `"${b.telefone}"`,
-        `"${b.email}"`,
+        `"${b.email || ""}"`,
         `"${b.estado}"`,
         `"${b.cidade}"`,
         `"${zona}"`,
@@ -485,7 +485,7 @@ export default function AdminPage() {
                             </span>
                           </td>
                           <td className="p-3 font-mono">{b.telefone}</td>
-                          <td className="p-3 text-zinc-600">{b.email}</td>
+                          <td className="p-3 text-zinc-600">{b.email || "—"}</td>
                           <td className="p-3 font-semibold">
                             {b.cidade} - {b.estado}
                           </td>
@@ -570,7 +570,7 @@ export default function AdminPage() {
                                     {m.telefone}
                                   </td>
                                   <td className="p-2.5 sm:px-4 text-zinc-600">
-                                    {m.email}
+                                    {m.email || "—"}
                                   </td>
                                   <td className="p-2.5 sm:px-4">
                                     {m.zonaRural ? (

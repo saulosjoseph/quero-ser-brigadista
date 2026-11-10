@@ -2,7 +2,7 @@ export interface Brigadista {
   id: string;
   nome: string;
   dataNascimento: string; // YYYY-MM-DD
-  email: string;
+  email?: string;
   telefone: string;
   estado: string; // UF
   cidade: string;

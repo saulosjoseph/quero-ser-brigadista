@@ -45,7 +45,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!email || typeof email !== "string" || !email.includes("@")) {
+    if (email && (typeof email !== "string" || (email.trim() && !email.includes("@")))) {
       return NextResponse.json(
         { success: false, error: "Informe um e-mail válido." },
         { status: 400 }
@@ -92,7 +92,7 @@ export async function POST(request: Request) {
     const inputData: NovoCadastroInput = {
       nome: nome.trim(),
       dataNascimento: dataNascimento.trim(),
-      email: email.trim().toLowerCase(),
+      email: typeof email === "string" && email.trim() ? email.trim().toLowerCase() : "",
       telefone: telefone.trim(),
       estado: estado.trim().toUpperCase(),
       cidade: cidade.trim(),

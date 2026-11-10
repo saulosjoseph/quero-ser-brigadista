@@ -242,7 +242,7 @@ export default function Home() {
       setErrorMessage("Por favor, informe sua data de nascimento.");
       return;
     }
-    if (!email.trim() || !email.includes("@")) {
+    if (email.trim() && !email.includes("@")) {
       setErrorMessage("Por favor, informe um endereço de e-mail válido.");
       return;
     }
@@ -301,14 +301,22 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF4E6]">
       {/* TARJA SUPERIOR COM LEMA DE HONRA */}
-      <header className="w-full bg-[#B91C1C] text-white border-b-4 border-[#18181B] py-2.5 px-4 shadow-md">
+      <header className="w-full bg-[#B91C1C] text-white border-b-4 border-[#18181B] py-2.5 px-4 shadow-md sticky top-0 z-30">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
-          <div className="flex items-center gap-2">
-          </div>
-          <div className="text-xs uppercase tracking-widest font-bold text-red-100 flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#22C55E] inline-block animate-pulse border border-black"></span>
-            Brigadas Populares Comunitárias em Ação
-          </div>
+          <nav className="flex items-center gap-2 font-poster text-xs sm:text-sm uppercase tracking-wide">
+            <a
+              href="#sobre"
+              className="bg-[#18181B] text-[#FEF08A] hover:bg-[#27272A] px-3 py-1 border-2 border-[#18181B] shadow-poster-sm transition-all"
+            >
+              Sobre
+            </a>
+            <a
+              href="#cadastro"
+              className="bg-[#FEF08A] text-[#18181B] hover:bg-[#FACC15] px-3 py-1 border-2 border-[#18181B] shadow-poster-sm transition-all font-bold"
+            >
+              Quero Ser Voluntário
+            </a>
+          </nav>
         </div>
       </header>
 
@@ -316,7 +324,7 @@ export default function Home() {
       <main className="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col gap-8">
         <section className="bg-[#FFFDF8] woodcut-border shadow-poster-lg p-6 sm:p-8 lg:p-10 relative overflow-hidden">
           {/* Efeito decorativo de selo/carimbo */}
-          <div className="absolute top-3 right-3 sm:top-5 sm:right-6 rotate-6 bg-[#FEF08A] text-[#713F12] border-2 border-[#18181B] px-3 py-1 font-poster text-xs sm:text-sm uppercase font-bold shadow-poster-sm">
+          <div className="absolute top-3 right-3 sm:top-5 sm:right-6 rotate-6 bg-[#FEF08A] text-[#713F12] border-2 border-[#18181B] px-3 py-1 font-poster text-xs sm:text-sm uppercase font-bold shadow-poster-sm z-10">
             Mobilização Permanente
           </div>
 
@@ -324,7 +332,7 @@ export default function Home() {
             {/* LADO ESQUERDO: TEXTOS E CHAMADAS */}
             <div className="lg:col-span-7 flex flex-col gap-4">
               <div className="inline-block self-start bg-[#166534] text-[#FEF08A] font-poster text-sm sm:text-base px-3 py-1 border-2 border-[#18181B] shadow-poster-sm uppercase">
-                Defesa Popular da Amazônia e do Território
+                Defesa Popular do Território
               </div>
 
               <h1 className="font-poster text-4xl sm:text-5xl lg:text-6xl leading-[0.95] text-[#B91C1C] drop-shadow-sm">
@@ -336,47 +344,61 @@ export default function Home() {
               </div>
 
               <p className="text-base sm:text-lg text-[#27272A] leading-relaxed font-medium">
-                Pela estruturação e capacitação das{" "}
+                Pela estruturação e capacitação de{" "}
                 <strong className="text-[#B91C1C] font-bold">
-                  Brigadas Populares Comunitárias
+                  Brigadas Comunitárias
                 </strong>
-                , fornecimento de EPIs e equipamentos adequados para prevenção, combate a incêndios florestais e resposta imediata em defesa das florestas, rios e das nossas famílias.
+                , fornecimento de EPIs e equipamentos adequados para prevenção, combate a incêndios florestais e resposta imediata em defesa da vida.
               </p>
-
-              {/* PONTOS DE DESTAQUE */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                <div className="bg-[#FEF9C3] p-3 border-2 border-[#18181B] shadow-poster-sm">
-                  <span className="block font-poster text-lg text-[#B91C1C]">01. RESPOSTA RÁPIDA</span>
-                  <span className="text-xs text-[#3F3F46]">Atuação imediata antes que o fogo tome conta.</span>
-                </div>
-                <div className="bg-[#DCFCE7] p-3 border-2 border-[#18181B] shadow-poster-sm">
-                  <span className="block font-poster text-lg text-[#15803D]">02. COMUNIDADE UNIDA</span>
-                  <span className="text-xs text-[#3F3F46]">Moradores, ribeirinhos, indígenas e quilombolas juntos.</span>
-                </div>
-                <div className="bg-[#FEE2E2] p-3 border-2 border-[#18181B] shadow-poster-sm">
-                  <span className="block font-poster text-lg text-[#991B1B]">03. ESTRUTURAÇÃO</span>
-                  <span className="text-xs text-[#3F3F46]">Exigência de apoio público, EPIs e treinamento sério.</span>
-                </div>
-              </div>
             </div>
 
-            {/* LADO DIREITO: CARTAZ ILUSTRATIVO ORIGINAL */}
-            <div className="lg:col-span-5 flex flex-col items-center">
-              <div className="relative p-2 bg-white border-4 border-[#18181B] shadow-poster-lg rotate-1 hover:rotate-0 transition-transform duration-300 w-full max-w-sm">
-                <div className="relative aspect-[3/4] w-full overflow-hidden border border-[#18181B]">
-                  <Image
-                    src="/images/poster-brigadistas.jpg"
-                    alt="Cartaz Oficial: Só o Povo Salva o Povo! - Brigadas Comunitárias"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 400px"
-                    className="object-cover"
-                    priority
-                  />
-                </div>
-                <div className="mt-2 text-center text-xs font-bold uppercase tracking-wider text-[#713F12] bg-[#FEF08A] py-1 border border-[#18181B]">
-                  Cartaz de Luta Popular de Santarém-PA
-                </div>
+            {/* LADO DIREITO: ILUSTRAÇÃO TOPO */}
+            <div className="lg:col-span-5 flex flex-col items-center justify-center w-full lg:pt-6">
+              <div className="relative aspect-square w-full">
+                <Image
+                  src="/images/topo.svg"
+                  alt="Exigimos Brigadas Comunitárias - Só o Povo Salva o Povo!"
+                  fill
+                  unoptimized
+                  sizes="(max-width: 1024px) 100vw, 480px"
+                  className="object-contain"
+                  priority
+                />
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SEÇÃO SOBRE O MOVIMENTO E MANIFESTO */}
+        <section id="sobre" className="bg-[#FFFDF8] woodcut-border shadow-poster-lg p-6 sm:p-8 lg:p-10 relative">
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b-4 border-[#18181B] pb-4">
+              <div>
+                <h2 className="font-poster text-3xl sm:text-4xl lg:text-5xl uppercase text-[#B91C1C] leading-none">
+                  Sobre a Mobilização
+                </h2>
+              </div>
+              <a
+                href="#cadastro"
+                className="bg-[#B91C1C] hover:bg-[#991B1B] text-white font-poster text-sm sm:text-base px-4 py-2 uppercase border-2 border-[#18181B] shadow-poster-sm transition-all"
+              >
+                Ir para o Cadastro &darr;
+              </a>
+            </div>
+
+            <div className="space-y-4 text-base sm:text-lg text-[#27272A] leading-relaxed font-medium">
+              <p>
+                A Amazônia está queimando e o Estado brasileiro se mostra incapaz de resolver a situação — seja devido a uma política de ajuste fiscal que impede investimentos estruturais e de pessoal, seja por se alinhar aos interesses do agronegócio e de empreiteiras que veem no fogo uma oportunidade de expandir as fronteiras de seus negócios. Diante desse cenário, o povo está na linha de frente do combate: sem equipamentos, sem EPIs e sem treinamento.
+              </p>
+              <p>
+                Este cadastro serve para levantarmos o quantitativo de pessoas que querem se unir no combate às queimadas de forma organizada, equipada e treinada.
+              </p>
+              <p>
+                Exigimos que o Estado entregue equipamentos para as comunidades que estão na linha de frente e forneça treinamento básico de forma imediata.
+              </p>
+              <p>
+                Exigimos um programa permanente de formação de brigadistas comunitários e o fortalecimento da rede de brigadistas já existente, com financiamento pelo Estado brasileiro, de forma que nunca mais um brigadista — herói do povo contra o fogo — dependa de doação de pão e água para continuar na luta.
+              </p>
             </div>
           </div>
         </section>
@@ -389,21 +411,14 @@ export default function Home() {
               <h2 className="font-poster text-2xl sm:text-3xl uppercase tracking-wide text-[#FEF08A] mb-3">
                 Por Que Se Cadastrar?
               </h2>
-              <p className="text-sm leading-relaxed mb-4 text-green-50">
-                Os incêndios criminosos e as queimadas descontroladas ameaçam a saúde, as plantações, a água e a vida de quem vive tanto nas comunidades rurais quanto nos bairros urbanos da nossa região.
-              </p>
               <ul className="space-y-2 text-xs sm:text-sm text-green-100">
                 <li className="flex items-start gap-2">
                   <span className="font-black text-[#FEF08A]">✓</span>
-                  <span>Mapeamento dos voluntários por território e localidade.</span>
+                  <span>Mapeamento dos voluntários por território.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="font-black text-[#FEF08A]">✓</span>
-                  <span>Formação e capacitação gratuita com brigadistas experientes.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="font-black text-[#FEF08A]">✓</span>
-                  <span>Articulação de redes comunitárias de alerta contra queimadas.</span>
+                  <span>Formação e capacitação.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="font-black text-[#FEF08A]">✓</span>
@@ -421,11 +436,8 @@ export default function Home() {
                   Inscrição de Voluntário
                 </span>
                 <h2 className="font-poster text-3xl sm:text-4xl uppercase text-[#18181B]">
-                  Preencha Sua Ficha de Brigadista
+                  Preencha Sua Ficha de inscrição
                 </h2>
-                <p className="text-sm text-[#52525B] mt-1 font-medium">
-                  Todos os campos são essenciais para organizar as equipes por território.
-                </p>
               </div>
 
               {sucesso ? (
@@ -488,9 +500,6 @@ export default function Home() {
                         onChange={(e) => setDataNascimento(e.target.value)}
                         className="bg-white border-2 border-[#18181B] px-3.5 py-2 text-base font-medium shadow-poster-sm focus:outline-none focus:ring-2 focus:ring-[#B91C1C]"
                       />
-                      <span className="text-[11px] text-[#71717A]">
-                        A brigada acolhe maiores de 18 para linha de frente e jovens para apoio e prevenção.
-                      </span>
                     </div>
 
                     <div className="flex flex-col gap-1.5">
@@ -512,12 +521,11 @@ export default function Home() {
                   {/* EMAIL */}
                   <div className="flex flex-col gap-1.5">
                     <label htmlFor="email" className="font-poster text-lg uppercase text-[#18181B]">
-                      E-mail <span className="text-[#B91C1C]">*</span>
+                      E-mail <span className="text-xs font-sans font-normal text-[#71717A] normal-case">(opcional)</span>
                     </label>
                     <input
                       id="email"
                       type="email"
-                      required
                       placeholder="seu.email@exemplo.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -591,7 +599,7 @@ export default function Home() {
                         className="w-5 h-5 accent-[#B91C1C] border-2 border-[#18181B] rounded cursor-pointer"
                       />
                       <span className="font-poster text-lg uppercase text-[#18181B]">
-                        Mora ou atua em Zona Rural? (Sim / Não)
+                        Mora ou atua em Zona Rural?
                       </span>
                     </label>
                     <p className="text-xs text-[#713F12] pl-8">
@@ -631,7 +639,7 @@ export default function Home() {
                     disabled={isPending}
                     className="mt-3 bg-[#B91C1C] hover:bg-[#991B1B] active:translate-x-0.5 active:translate-y-0.5 text-white font-poster text-2xl uppercase tracking-wider py-4 px-6 border-3 border-[#18181B] shadow-poster cursor-pointer transition-all disabled:opacity-50"
                   >
-                    {isPending ? "Registrando Voluntário..." : "Enviar Meu Cadastro de Brigadista!"}
+                    {isPending ? "Registrando Voluntário..." : "Enviar Meu Cadastro!"}
                   </button>
 
                   <div className="text-center font-poster text-sm text-[#713F12] uppercase tracking-wide">
@@ -654,6 +662,15 @@ export default function Home() {
             <span className="text-xs text-zinc-400">
               Articulação Comunitária Autônoma e Popular &bull; Santarém e Região Amazônica
             </span>
+          </div>
+          <div className="flex items-center gap-4 font-poster text-xs sm:text-sm uppercase tracking-wider">
+            <a href="#sobre" className="text-[#FEF08A] hover:underline">
+              Sobre a Luta
+            </a>
+            <span className="text-zinc-600">&bull;</span>
+            <a href="#cadastro" className="text-[#FEF08A] hover:underline">
+              Ficha de Inscrição
+            </a>
           </div>
         </div>
       </footer>
